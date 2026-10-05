@@ -41,28 +41,92 @@ display:
     pages:
       - id: page_temperature
         lambda: |-
-          it.print(0, 0, id(font_2line), "temperature info");
+          it.print(0, 0, id(font_2line), "temperature");
       - id: page_battery
         lambda: |-
-          it.print(0, 0, id(font_2line), "battery info");
+          it.print(0, 0, id(font_2line), "battery");
+      - id: page_clock
+        lambda: |-
+          it.print(0, 0, id(font_2line), "clock");
+      - id: page_heat
+        lambda: |-
+          it.print(0, 0, id(font_2line), "heat");
+      - id: page_io
+        lambda: |-
+          it.print(0, 0, id(font_2line), "I/O");
+      - id: page_snowflake
+        lambda: |-
+          it.print(0, 0, id(font_2line), "snowflake");
+      - id: page_up
+        lambda: |-
+          it.print(0, 0, id(font_2line), "up");
+      - id: page_down
+        lambda: |-
+          it.print(0, 0, id(font_2line), "down");
 
+
+script:
+  - id: backlight_timeout
+    mode: restart
+    then:
+      - output.turn_on: display_backlight
+      - delay: 5s
+      - output.turn_off: display_backlight
 binary_sensor:
   - id: button_temperature
+    platform: gpio
+    pin: GPIO14
+    on_press:
+      then:
+        - display.page.show: page_temperature
+        - lambda: id(backlight_timeout).execute();
+  - id: button_battery
+    platform: gpio
+    pin: GPIO15
+    on_press:
+      then:
+        - display.page.show: page_battery
+        - lambda: id(backlight_timeout).execute();
+  - id: button_clock
     platform: gpio
     pin: GPIO16
     on_press:
       then:
-        - display.page.show: page_temperature
-        - output.turn_on: display_backlight
-        - delay: 5s
-        - output.turn_off: display_backlight
-  - id: button_battery
+        - display.page.show: page_clock
+        - lambda: id(backlight_timeout).execute();
+  - id: button_heat
     platform: gpio
     pin: GPIO17
     on_press:
       then:
-        - display.page.show: page_battery
-        - output.turn_on: display_backlight
-        - delay: 5s
-        - output.turn_off: display_backlight
+        - display.page.show: page_heat
+        - lambda: id(backlight_timeout).execute();
+  - id: button_io
+    platform: gpio
+    pin: GPIO18
+    on_press:
+      then:
+        - display.page.show: page_io
+        - lambda: id(backlight_timeout).execute();
+  - id: button_snowflake
+    platform: gpio
+    pin: GPIO19
+    on_press:
+      then:
+        - display.page.show: page_snowflake
+        - lambda: id(backlight_timeout).execute();
+  - id: button_up
+    platform: gpio
+    pin: GPIO20
+    on_press:
+      then:
+        - display.page.show: page_up
+        - lambda: id(backlight_timeout).execute();
+  - id: button_down
+    platform: gpio
+    pin: GPIO21
+    on_press:
+      then:
+        - display.page.show: page_down
+        - lambda: id(backlight_timeout).execute();
 
